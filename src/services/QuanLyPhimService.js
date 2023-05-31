@@ -8,3 +8,4 @@ import {
 } from "./baseService";
 
 export const GetBannerFromAPI = () => useGetAPI('/api/QuanLyPhim/LayDanhSachBanner')
+
