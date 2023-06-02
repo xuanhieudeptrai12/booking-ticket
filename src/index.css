@@ -1,3 +1,33 @@
 @tailwind base;
+
+/* Chrome, Edge, and Safari */
+.my-scrollbar::-webkit-scrollbar {
+    border-radius: 10px;
+    width: 7px;
+    background-color: #F5F5F5;
+    margin-left: 200px;
+}
+
+.my-scrollbar::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.1);
+    border: 1px solid #ccc;
+}
+
+.my-scrollbar::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: linear-gradient(left, #fff, #e4e4e4);
+    border: 1px solid #aaa;
+}
+
+.my-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #fff;
+}
+
+
+.my-scrollbar::-webkit-scrollbar-thumb:active {
+    background: linear-gradient(left, #22ADD4, #1E98BA);
+}
+
 @tailwind components;
 @tailwind utilities;
