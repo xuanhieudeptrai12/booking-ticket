@@ -1,10 +1,13 @@
 import React from "react";
 import { PlayCircleOutlined } from '@ant-design/icons'
 import './Film_Flip.css'
+import { useNavigate } from "react-router-dom";
+
+
 
 function Film_Flip(props) {
-
     const { item } = props
+    const navigate = useNavigate()
 
     return (
         <div className="flip-card mt-6">
@@ -26,10 +29,16 @@ function Film_Flip(props) {
 
                 </div>
             </div>
-            <div className="text-center cursor-pointer py-2 bg-indigo-300 my-2 text-success-50 font-bold">ĐẶT VÉ</div>
+            <div
+                onClick={() => { navigate(`/detail/${item.maPhim}`) }}
+                className="text-center cursor-pointer py-2 bg-indigo-300 my-2 text-success-50 font-bold">
+                ĐẶT VÉ
+            </div>
         </div>
 
     );
 }
+
+
 
 export default Film_Flip;

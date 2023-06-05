@@ -6,6 +6,7 @@ import Contact from './pages/Contact/Contact';
 import News from './pages/News/News';
 import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
+import Detail from './pages/Detail/Detail';
 
 export const history = createBrowserHistory();
 
@@ -17,6 +18,7 @@ function App() {
         <Route path="/home" element={<HomeTemplate />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/news" element={<News />} />
+        <Route path="/detail/:id" element={<Detail />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/" element={<HomeTemplate />} />

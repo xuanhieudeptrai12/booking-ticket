@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import HomeMenu from "./HomeMenu/HomeMenu";
+import HomeCarousel from '../../teamplates/HomeTemplate/Layout/HomeCarousel/HomeCarousel'
 //kết nối redux
 // import { QuanLyPhimService } from '../../services/QuanLyPhimService'
 // import { QuanLyPhimReducer } from './reducers/QuanLyPhimReducer';
@@ -23,6 +24,7 @@ function Home(props) {
 
     return (
         <div>
+            <HomeCarousel />
             <section className="text-gray-600 body-font" >
                 <div className="container px-5 py-24 mx-auto " >
                     <MultipleRowSlick arrFilm={arrFilm} />

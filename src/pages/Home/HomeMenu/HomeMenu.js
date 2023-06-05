@@ -7,22 +7,12 @@ const { TabPane } = Tabs
 
 function HomeMenu(props) {
 
-    const [state, setState] = useState({
-        tabPosition: 'left'
-    })
-
-    const changeTabPosition = (e) => {
-        // setState({ tabPosition: e.target.value });
-        console.log(e);
-    };
-
     //thấy thông tin tên rạp từ props
     const { heThongRapChieu } = props
-    console.log(heThongRapChieu);
-    const { tabPosition } = state
+
     return (
         <>
-            <Tabs tabPosition={tabPosition} className="border">
+            <Tabs tabPosition={'left'} className="border">
                 {heThongRapChieu.map((rap, index) => {
                     return <TabPane
                         tab={
@@ -41,7 +31,7 @@ function HomeMenu(props) {
                     >
 
                         <Tabs
-                            tabPosition={tabPosition}
+                            tabPosition={'left'}
                         >
                             {rap.lstCumRap?.slice(0, 8).map((cumRap, id) =>
                                 <TabPane
@@ -99,7 +89,7 @@ function HomeMenu(props) {
                                                         {phim.lstLichChieuTheoPhim?.slice(0, 12).map((lichChieu, index) =>
                                                             <NavLink
                                                                 key={index}
-                                                                to="/"
+                                                                to="/detail"
                                                                 className="w-24 text-base text-green-400  border px-3 py-1 rounded-lg h-9 transition duration-300 ease-in-out hover:bg-green-400 hover:text-white hover:shadow-md"
                                                             >
                                                                 {/* <button></button> */}
