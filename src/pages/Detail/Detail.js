@@ -6,10 +6,11 @@ import '@tsamantanis/react-glassmorphism/dist/index.css'
 import "../../assets/styles/circle.css"
 import { Rate, Tabs } from 'antd';
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import { SET_CHI_TIET_PHIM } from "../../redux/actions/types/QuanLyRapType";
 import { layThongTinChiTietPhim } from "../../redux/actions/QuanLyRapAction";
 import moment from "moment";
+import TabPane from "antd/es/tabs/TabPane";
 
 function Detail(props) {
 
@@ -65,7 +66,6 @@ function Detail(props) {
                             <h1 style={{ marginLeft: '5%' }} className="text-green-400 text-2xl"><Rate allowHalf value={filmDetail.danhGia / 2} style={{ color: '#78ed78', fontSize: 30 }} /></h1>
                             <div className={`c100 p${filmDetail.danhGia * 10} big`}>
                                 <span className="text-white">
-
                                     {filmDetail.danhGia * 10}%
                                 </span>
                                 <div className="slice">
@@ -79,19 +79,58 @@ function Detail(props) {
 
                         </div>
                     </div>
-                    <div className="mt-24 ml-52">
-                        <Tabs
-                            tabPosition={'left'}
-                            items={new Array(3).fill(null).map((_, i) => {
-                                const id = String(i + 1);
-                                return {
-                                    label: `Tab ${id}`,
-                                    key: id,
-                                    children: `Content of Tab ${id}`,
-                                };
-                            })}
-                        />
-                    </div>
+
+
+                    <div className="mt-10 ml-72 w-2/3 container bg-white px-5 py-5" >
+                    <Tabs defaultActiveKey="1" centered >
+                        <TabPane tab="Lịch chiếu" key="1" style={{minHeight:300}}>
+                            <div >
+                                <Tabs tabPosition={'left'} >
+                                    {filmDetail.heThongRapChieu?.map((htr, index) => {
+                                        return <TabPane
+                                            tab={<div className="flex flex-row items-center justify-center">
+                                                <img src={htr.logo} className="rounded-full w-full" style={{width:50}} alt="..." />
+                                                <div className="text-center ml-2">
+                                                {htr.tenHeThongRap}
+                                                </div>
+                                            </div>}
+                                            key={index}>
+                                                {htr.cumRapChieu?.map((cumRap,index)=>{ 
+                                                    return <div className="mt-5" key={index}>
+                                                        <div className="flex flex-row">
+                                                            <img style={{width:60,height:60}} src={cumRap.hinhAnh} alt="..." />
+                                                            <div className="ml-2">
+                                                                <p style={{fontSize:20,fontWeight:'bold',lineHeight:1}} >{cumRap.tenCumRap}</p>
+                                                                <p className="text-gray-400" style={{marginTop:0}}>{cumRap.diaChi}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div className="thong-tin-lich-chieu grid grid-cols-4">
+                                                            {cumRap.lichChieuPhim?.slice(0,12).map((lichChieu,index) =>     {
+                                                                return <NavLink to={`/checkout/${lichChieu.maLichChieu}`} key={index} className="col-span-1 text-green-800 font-bold">
+                                                                    {moment(lichChieu.ngayChieuGioChieu).format('hh:mm A')}
+                                                                </NavLink>
+                                                            })}
+                                                        </div>
+                                                    </div>
+                                                })}
+
+
+
+                                    </TabPane>
+                                    })}
+
+
+                                </Tabs>
+                            </div>
+                        </TabPane>
+                        <TabPane tab="Thông tin" key="2" style={{minHeight:300}}>
+                            Thông tin
+                    </TabPane>
+                        <TabPane tab="Đánh giá" key="3" style={{minHeight:300}}>
+                            Đánh giá
+                    </TabPane>
+                    </Tabs>
+                </div>
                 </CustomCard>
             </div>
             <Footer />

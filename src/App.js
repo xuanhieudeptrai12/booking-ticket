@@ -4,9 +4,10 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { HomeTemplate } from './teamplates/HomeTemplate/HomeTemplate'
 import Contact from './pages/Contact/Contact';
 import News from './pages/News/News';
-import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
 import Detail from './pages/Detail/Detail';
+import CheckoutTemplate from './teamplates/CheckoutTemplate/CheckoutTemplate';
+import UserTemplate from './teamplates/UserTemplate/UserTemplate';
 
 export const history = createBrowserHistory();
 
@@ -19,9 +20,10 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/news" element={<News />} />
         <Route path="/detail/:id" element={<Detail />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<UserTemplate />} />
         <Route path="/register" element={<Register />} />
         <Route path="/" element={<HomeTemplate />} />
+        <Route path="/checkout/:id" element={<CheckoutTemplate />} />
       </Routes>
     </Router>
   )
