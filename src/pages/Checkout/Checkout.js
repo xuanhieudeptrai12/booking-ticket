@@ -2,15 +2,31 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import style from "./Checkout.module.css";
 import "./Checkout.css";
-import { CheckOutlined, CloseOutlined, UserOutlined } from "@ant-design/icons";
-import { useParams } from "react-router-dom";
-import { layChiTietPhongVeAction } from "../../redux/actions/QuanLyDatVeAction";
+import {
+   CheckOutlined,
+   CloseOutlined,
+   UserOutlined,
+   HomeOutlined,
+} from "@ant-design/icons";
+import { NavLink, useParams } from "react-router-dom";
+import {
+   datVeAction,
+   layChiTietPhongVeAction,
+} from "../../redux/actions/QuanLyDatVeAction";
 import { Fragment } from "react";
+import { DAT_VE } from "../../redux/actions/types/QuanLyDatVeType";
+import { Tabs } from "antd";
+import moment from "moment";
+import { layThongTinNguoiDungAction } from "../../redux/actions/QuanLyNguoiDungAction";
 
 function Checkout() {
    const { userLogin } = useSelector((state) => state.QuanLyNguoiDungReducer);
-   const { chiTietPhongVe } = useSelector((state) => state.QuanLyDatVeReducer);
+   const { chiTietPhongVe, danhSachGheDangDat } = useSelector(
+      (state) => state.QuanLyDatVeReducer
+   );
+
    const { id } = useParams();
+
    const dispatch = useDispatch();
 
    const { thongTinPhim, danhSachGhe } = chiTietPhongVe;
@@ -19,7 +35,6 @@ function Checkout() {
       dispatch(layChiTietPhongVeAction(id));
    }, []);
 
-   console.log(chiTietPhongVe);
    return (
       <div className=" min-h-screen mt-5">
          <div className="grid grid-cols-12">
@@ -36,30 +51,35 @@ function Checkout() {
                      {/* {renderSeats()} */}
                      {danhSachGhe?.map((ghe, index) => {
                         let classGheVip = ghe.loaiGhe === "Vip" ? "gheVip" : "";
-                        let classGheDaDat = ghe.daDat === true ? "gheDaDat" : "";
+                        let classGheDaDat =
+                           ghe.daDat === true ? "gheDaDat" : "";
                         let classGheDangDat = "";
-                        
+
                         //Kiểm tra từng ghế render xem có trong mảng ghế đang đặt hay không
-                        // let indexGheDD = danhSachGheDangDat.findIndex(gheDD => gheDD.maGhe === ghe.maGhe);
+                        // so sánh giữa gheDD.maGhe lấy từ reducer và mảng danhSachGhe đang được map
+                        let indexGheDD = danhSachGheDangDat.findIndex(
+                           (gheDD) => gheDD.maGhe === ghe.maGhe
+                        );
 
                         let classGheDaDuocDat = "";
                         if (userLogin.taiKhoan === ghe.taiKhoanNguoiDat) {
                            classGheDaDuocDat = "gheDaDuocDat";
                         }
 
-                        // if (indexGheDD != -1) {
-                        //     classGheDaDat = 'gheDangDat';
-                        // }
+                        // khác -1 tức là ghế đã có người đang đặt, ta sẽ gán class vào để nó đổi màu
+                        if (indexGheDD !== -1) {
+                           classGheDaDat = "gheDangDat";
+                        }
 
                         return (
                            <Fragment key={index}>
                               <button
-                                 // onClick={() => {
-                                 //     dispatch({
-                                 //         type: DAT_VE,
-                                 //         gheDuocChon: ghe
-                                 //     })
-                                 // }}
+                                 onClick={() => {
+                                    dispatch({
+                                       type: DAT_VE,
+                                       gheDuocChon: ghe,
+                                    });
+                                 }}
                                  disabled={ghe.daDat}
                                  className={`ghe ${classGheVip} ${classGheDaDat} ${classGheDangDat} ${classGheDaDuocDat} text-center`}
                                  key={index}
@@ -105,7 +125,7 @@ function Checkout() {
                      </thead>
                      <tbody className="bg-white divide-y divide-gray-200">
                         <tr>
-                           <td>
+                           <td style={{ textAlign: "center" }}>
                               <button className="ghe text-center">
                                  {" "}
                                  <CheckOutlined
@@ -116,7 +136,7 @@ function Checkout() {
                                  />{" "}
                               </button>{" "}
                            </td>
-                           <td>
+                           <td style={{ textAlign: "center" }}>
                               <button className="ghe gheDangDat text-center">
                                  {" "}
                                  <CheckOutlined
@@ -127,7 +147,7 @@ function Checkout() {
                                  />
                               </button>{" "}
                            </td>
-                           <td>
+                           <td style={{ textAlign: "center" }}>
                               <button className="ghe gheVip text-center">
                                  <CheckOutlined
                                     style={{
@@ -137,7 +157,7 @@ function Checkout() {
                                  />
                               </button>{" "}
                            </td>
-                           <td>
+                           <td style={{ textAlign: "center" }}>
                               <button className="ghe gheDaDat text-center">
                                  {" "}
                                  <CheckOutlined
@@ -148,7 +168,7 @@ function Checkout() {
                                  />{" "}
                               </button>{" "}
                            </td>
-                           <td>
+                           <td style={{ textAlign: "center" }}>
                               <button className="ghe gheDaDuocDat text-center">
                                  {" "}
                                  <CheckOutlined
@@ -166,12 +186,13 @@ function Checkout() {
             </div>
             <div className="col-span-3">
                <h3 className="text-green-400 text-center text-4xl">
-                  {/* {danhSachGheDangDat
-                     .reduce((tongTien, ghe, index) => {
-                        return (tongTien += ghe.giaVe);
-                     }, 0)
-                     .toLocaleString()} */}
-                  đ
+                  {danhSachGheDangDat
+                     .reduce(
+                        (tongTien, ghe, index) => (tongTien += ghe.giaVe),
+                        0
+                     )
+                     .toLocaleString()}{" "}
+                  Đ
                </h3>
                <hr />
                <h3 className="text-xl mt-2">{thongTinPhim?.tenPhim}</h3>
@@ -186,10 +207,11 @@ function Checkout() {
                <div className="flex flex-row my-5">
                   <div className="w-4/5">
                      <span className="text-red-400 text-lg">Ghế</span>
-
-                     {/* {_.sortBy(danhSachGheDangDat, ["stt"]).map(
-                        (gheDD, index) => {
-                           return (
+                     {danhSachGheDangDat
+                        ?.sort((a, b) => a.stt.localeCompare(b.stt)) //sap xep mang theo stt ghe'
+                        ?.map(
+                           //sap xep xong roi moi render
+                           (gheDD, index) => (
                               <span
                                  key={index}
                                  className="text-green-500 text-xl"
@@ -197,18 +219,17 @@ function Checkout() {
                                  {" "}
                                  {gheDD.stt}
                               </span>
-                           );
-                        }
-                     )} */}
+                           )
+                        )}
                   </div>
                   <div className="text-right col-span-1">
                      <span className="text-green-800 text-lg">
-                        {/* {danhSachGheDangDat
-                           .reduce((tongTien, ghe, index) => {
-                              return (tongTien += ghe.giaVe);
-                           }, 0)
-                           .toLocaleString()} */}
-                        0Đ
+                        {danhSachGheDangDat
+                           .reduce(
+                              (tongTien, ghe, index) => (tongTien += ghe.giaVe),
+                              0
+                           )
+                           .toLocaleString()}
                      </span>
                   </div>
                </div>
@@ -228,15 +249,18 @@ function Checkout() {
                   style={{ marginBottom: 0 }}
                >
                   <div
-                     //  onClick={() => {
-                     //     const thongTinDatVe = new ThongTinDatVe();
-                     //     thongTinDatVe.maLichChieu = props.match.params.id;
-                     //     thongTinDatVe.danhSachVe = danhSachGheDangDat;
+                     onClick={() => {
+                        // gom thông tin đặt vé gồm mã lịch chiếu và danh sách vé được mua gửi về server
+                        //tạo đối tượng để gửi về server
+                        const thongTinDatVe = {
+                           maLichChieu: 0,
+                           danhSachVe: [],
+                        };
+                        thongTinDatVe.maLichChieu = id;
+                        thongTinDatVe.danhSachVe = danhSachGheDangDat;
 
-                     //     console.log(thongTinDatVe);
-
-                     //     dispatch(datVeAction(thongTinDatVe));
-                     //  }}
+                        dispatch(datVeAction(thongTinDatVe));
+                     }}
                      className="bg-green-500 text-white w-full text-center py-3 font-bold text-2xl cursor-pointer"
                   >
                      ĐẶT VÉ
@@ -248,4 +272,206 @@ function Checkout() {
    );
 }
 
-export default Checkout;
+const { TabPane } = Tabs;
+
+export default function CheckoutTab(props) {
+   const { tabActive } = useSelector((state) => state.QuanLyDatVeReducer);
+   const dispatch = useDispatch();
+   console.log("tabActive", tabActive);
+
+   const { userLogin } = useSelector((state) => state.QuanLyNguoiDungReducer);
+   //  useEffect(()=>{
+   //      return ()=> {
+   //          dispatch({
+   //              type:'CHANGE_TAB_ACTIVE',
+   //              number:'1'
+   //          })
+   //      }
+   //  },[])
+
+   const operations = "";
+   // const operations = (
+   //    <Fragment>
+   //       {!_.isEmpty(userLogin) ? (
+   //          <Fragment>
+   //             {" "}
+   //             <button
+   //                // onClick={() => {
+   //                //    history.push("/profile");
+   //                // }}
+   //             >
+   //                {" "}
+   //                <div
+   //                   style={{
+   //                      width: 50,
+   //                      height: 50,
+   //                      display: "flex",
+   //                      justifyContent: "center",
+   //                      alignItems: "center",
+   //                   }}
+   //                   className="text-2xl ml-5 rounded-full bg-red-200"
+   //                >
+   //                   {userLogin.taiKhoan.substr(0, 1)}
+   //                </div>
+   //                Hello ! {userLogin.taiKhoan}
+   //             </button>{" "}
+   //             <button
+   //                onClick={() => {
+   //                   localStorage.removeItem(USER_LOGIN);
+   //                   localStorage.removeItem(TOKEN);
+   //                   history.push("/home");
+   //                   window.location.reload();
+   //                }}
+   //                className="text-blue-800"
+   //             >
+   //                Đăng xuất
+   //             </button>{" "}
+   //          </Fragment>
+   //       ) : (
+   //          ""
+   //       )}
+   //    </Fragment>
+   // );
+
+   return (
+      <div className="p-5">
+         <Tabs
+            // tabBarExtraContent={operations}
+            // defaultActiveKey="1"
+            // activeKey={tabActive}
+            onChange={(key) => {
+               console.log("key", key);
+               dispatch({
+                  type: "CHANGE_TAB_ACTIVE",
+                  number: key.toString(),
+               });
+            }}
+         >
+            <TabPane tab="01 CHỌN GHẾ & THANH TOÁN" key="1">
+               <Checkout {...props} />
+            </TabPane>
+
+            <TabPane tab="02 KẾT QUẢ ĐẶT VÉ" key="2">
+               <KetQuaDatVe {...props} />
+            </TabPane>
+
+            {/* tab pane dành về trang homepage */}
+            <TabPane
+               tab={
+                  <div
+                     className="text-center"
+                     style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                     }}
+                  >
+                     <NavLink to="/">
+                        <HomeOutlined
+                           style={{ marginLeft: 10, fontSize: 25 }}
+                        />
+                     </NavLink>
+                  </div>
+               }
+               key="3"
+            ></TabPane>
+         </Tabs>
+      </div>
+   );
+}
+
+function KetQuaDatVe(props) {
+   const dispatch = useDispatch();
+   const { thongTinNguoiDung } = useSelector(
+      (state) => state.QuanLyNguoiDungReducer
+   );
+
+   // const { userLogin } = useSelector(state => state.QuanLyNguoiDungReducer);
+
+   useEffect(() => {
+      // lấy thông tin bao gồm thông tin người đặt vé và thông tin vé để làm trang lịch sử
+      dispatch(layThongTinNguoiDungAction());
+   }, []);
+
+   console.log("thongTinNguoiDung", thongTinNguoiDung);
+
+   const renderTicketItem = function () {
+      return thongTinNguoiDung?.thongTinDatVe?.map((ticket, index) => {
+         // khi đặt 2 ghế chắc chắn là chung rạp nên chỉ cần lấy ra phần tử đầu tiên và hiển thị lên thông tin là rạp đang chiếu => seats.tenHeThongRap
+         const seats = ticket.danhSachGhe[0];
+
+         return (
+            <div className="p-2 lg:w-1/3 md:w-1/2 w-full" key={index}>
+               <div className="h-full flex items-center border-gray-200 border p-4 rounded-lg">
+                  <img
+                     alt="team"
+                     className="w-16 h-16 bg-gray-100 object-cover object-center flex-shrink-0 rounded-full mr-4"
+                     src={ticket.hinhAnh}
+                  />
+                  <div className="flex-grow">
+                     <h2 className="text-pink-500 title-font font-medium text-2xl">
+                        {ticket.tenPhim}
+                     </h2>
+                     <p className="text-gray-500">
+                        <span className="font-bold">Giờ chiếu:</span>{" "}
+                        {moment(ticket.ngayDat).format("hh:mm A")} -{" "}
+                        <span className="font-bold">Ngày chiếu:</span>{" "}
+                        {moment(ticket.ngayDat).format("DD-MM-YYYY")} .
+                     </p>
+                     <p>
+                        <span className="font-bold">Địa điểm:</span>{" "}
+                        {seats.tenHeThongRap}{" "}
+                     </p>
+                     <p>
+                        <span className="font-bold">Tên rạp:</span>{" "}
+                        {seats.tenCumRap} -{" "}
+                        <span className="font-bold">Ghế:</span>{" "}
+                        {ticket.danhSachGhe.map((ghe, index) => {
+                           return (
+                              <span
+                                 className="text-green-500 text-xl"
+                                 key={index}
+                              >
+                                 {" "}
+                                 [ {ghe.tenGhe} ]{" "}
+                              </span>
+                           );
+                        })}
+                     </p>
+                  </div>
+               </div>
+            </div>
+         );
+      });
+   };
+
+   return (
+      <div className="p-5">
+         <section className="text-gray-600 body-font">
+            <div className="container px-5 py-24 mx-auto">
+               <div className="flex flex-col text-center w-full mb-20">
+                  <h1 className="sm:text-3xl text-2xl font-medium title-font mb-4  text-purple-600 ">
+                     Lịch sử đặt vé khách hàng
+                  </h1>
+                  <p className="lg:w-2/3 mx-auto leading-relaxed text-base">
+                     Hãy xem thông tin địa và thời gian để xem phim vui vẻ bạn
+                     nhé !
+                  </p>
+               </div>
+               <div className="flex flex-wrap -m-2">
+                  {renderTicketItem()}
+                  {/* <div className="p-2 lg:w-1/3 md:w-1/2 w-full">
+                       <div className="h-full flex items-center border-gray-200 border p-4 rounded-lg">
+                           <img alt="team" className="w-16 h-16 bg-gray-100 object-cover object-center flex-shrink-0 rounded-full mr-4" src="https://picsum.photos/200/200" />
+                           <div className="flex-grow">
+                               <h2 className="text-gray-900 title-font font-medium">Lật mặt 48h</h2>
+                               <p className="text-gray-500">10:20 Rạp 5, Hệ thống rạp cinestar bhd </p>
+                           </div>
+                       </div>
+                   </div> */}
+               </div>
+            </div>
+         </section>
+      </div>
+   );
+}

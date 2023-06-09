@@ -1,34 +1,73 @@
 import axios from "axios";
-import { DOMAIN } from "../../util/setting/config";
-import { SET_CHI_TIET_PHONG_VE } from "./types/QuanLyDatVeType";
-import { GetBannerFromAPI } from '../../services/QuanLyPhimService'
-import { useGetAPI } from "../../services/baseService";
-
+import { DOMAIN, TOKEN } from "../../util/setting/config";
+import {
+   DAT_VE_HOAN_TAT,
+   SET_CHI_TIET_PHONG_VE,
+} from "./types/QuanLyDatVeType";
+import {
+   displayLoadingAction,
+   hideLoadingAction,
+} from "../actions/LoadingAction";
 
 export const layChiTietPhongVeAction = (maLichChieu) => {
+   return async (dispatch) => {
+      try {
+         const result = await axios({
+            url: `${DOMAIN}//api/QuanLyDatVe/LayDanhSachPhongVe?MaLichChieu=${maLichChieu}`,
+            method: "GET",
+         });
 
-    return async (dispatch) => {
-        try {
-            
-            const result = await axios({
-                url: `${DOMAIN}//api/QuanLyDatVe/LayDanhSachPhongVe?MaLichChieu=${maLichChieu}`,
-                method: "GET",
-            })
-            
-            //đưa lên reducer
-            console.log(result);
+         //đưa lên reducer
+         console.log(
+            result.data.content.danhSachGhe.filter(
+               (item) => item.daDat === false
+            )
+         );
 
-            if (result.status === 200) {
-                dispatch({
-                    type: SET_CHI_TIET_PHONG_VE,
-                    chiTietPhongVe: result.data.content
-                })
-            }
+         if (result.status === 200) {
+            dispatch({
+               type: SET_CHI_TIET_PHONG_VE,
+               chiTietPhongVe: result.data.content,
+            });
+         }
+      } catch (errors) {
+         console.log("errors", errors.response?.data);
+         console.log("errors", errors);
+      }
+   };
+};
 
-        } catch (errors) {
-            console.log('errors', errors.response?.data);
-            console.log('errors', errors);
-        }
-    }
+export const datVeAction = (thongTinDatVe) => {
+   return async (dispatch) => {
+      try {
+         dispatch(displayLoadingAction);
 
-}
+         const result = await axios({
+            url: `${DOMAIN}/api/QuanLyDatVe/DatVe`,
+            method: "POST",
+            data: thongTinDatVe,
+            headers: {
+               Authorization:
+                  "Bearer " + localStorage.getItem(TOKEN).replace(/"/g, ""),
+            }, //JWT
+         });
+
+         //đưa lên reducer
+         //nếu gọi lên api đặt vé thành công thì gọi lại logic lấy chi tiết phòng vé để load lại chỗ ngồi đã được đặt
+         if (result.status === 200) {
+            // sau khi đặt vé sau thì đợi hành động gọi lại để update lại vé là đã đặt
+            await dispatch(layChiTietPhongVeAction(thongTinDatVe.maLichChieu));
+            //xong tiếp tục đợi 1 hành động clear hết thông tin bên tay phải như giá vé, tên người dùng
+            await dispatch({
+               type: DAT_VE_HOAN_TAT,
+            });
+            //rồi mới tắt loading
+            dispatch(hideLoadingAction);
+         }
+      } catch (errors) {
+         dispatch(hideLoadingAction);
+         console.log("errors", errors.response?.data);
+         console.log("errors", errors);
+      }
+   };
+};
