@@ -1,20 +1,23 @@
 import { useFormik } from "formik";
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { LogoutOutlined } from "@ant-design/icons";
+import { USER_LOGIN } from "../../../../util/setting/config";
 
 function Header(props) {
    const navigate = useNavigate();
    const handleClick = (type) => {
       navigate(type);
    };
-
+   const test = localStorage.getItem(USER_LOGIN) === null;
+   console.log(test);
    return (
       <div>
          <header className="p-4 dark:bg-gray-800 dark:text-gray-100 bg-opacity-40 bg-black text-white fixed w-full z-10">
             <div className="container flex justify-between h-16 mx-auto">
                <NavLink
                   rel="noopener noreferrer"
-                  to={'/'}
+                  to={"/"}
                   aria-label="Back to homepage"
                   className="flex items-center p-2"
                >
@@ -54,20 +57,43 @@ function Header(props) {
                      </NavLink>
                   </li>
                </ul>
-               <div className="items-center flex-shrink-0 hidden lg:flex">
-                  <button
-                     onClick={() => handleClick("/login")}
-                     className="self-center px-8 py-3 rounded"
-                  >
-                     Đăng nhập
-                  </button>
-                  <button
-                     onClick={() => handleClick("/register")}
-                     className="self-center px-8 py-3 font-semibold rounded dark:bg-violet-400 dark:text-gray-900"
-                  >
-                     Đăng kí
-                  </button>
-               </div>
+
+               {test ? (
+                  <div className="items-center flex-shrink-0 hidden lg:flex">
+                     <button
+                        onClick={() => handleClick("/login")}
+                        className="self-center px-8 py-3 rounded"
+                     >
+                        Đăng nhập
+                     </button>
+                     <button
+                        onClick={() => handleClick("/register")}
+                        className="self-center px-8 py-3 font-semibold rounded dark:bg-violet-400 dark:text-gray-900"
+                     >
+                        Đăng kí
+                     </button>
+                  </div>
+               ) : (
+                  <div className="flex items-center flex-shrink-0 lg:flex">
+                     <img
+                        src="https://picsum.photos/50/50"
+                        alt="123"
+                        className="mr-4 rounded-full"
+                     />
+                     <div
+                        style={{
+                           width: "50px",
+                           height: "50px",
+                           padding: "6px 0px 0px 7px",
+                           fontSize: "22px",
+                        }}
+                        className="hover:cursor-pointer"
+                     >
+                        <LogoutOutlined size={400} />
+                     </div>
+                  </div>
+               )}
+
                <button className="p-4 lg:hidden">
                   <svg
                      xmlns="http://www.w3.org/2000/svg"

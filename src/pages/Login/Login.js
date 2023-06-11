@@ -1,11 +1,7 @@
 import { useFormik } from "formik";
 import React from "react";
-import {
-   NavLink,
-   useLocation,
-   useNavigate,
-   useSearchParams,
-} from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { dangNhapAction } from "../../redux/actions/QuanLyNguoiDungAction";
 import logo from "../../assets/image/web-logo.png";
@@ -17,14 +13,19 @@ function Login() {
       (state) => state.QuanLyNguoiDungReducer
    );
    const navigate = useNavigate();
+   const signUpUserSchema = yup.object().shape({
+      taiKhoan: yup.string().required("*Require Field!"),
+      matKhau: yup.string().required("*Require Field!"),
+   });
    const formik = useFormik({
       initialValues: {
          taiKhoan: "",
          matKhau: "",
       },
+      validationSchema: signUpUserSchema,
       onSubmit: (values) => {
          // const action = dangNhapAction(values);
-         dispatch(dangNhapAction(values, navigate));
+         dispatch(dangNhapAction(values, navigate, previousLocation));
          if (previousLocation !== "") {
             navigate({ pathname: previousLocation });
          }
@@ -72,12 +73,13 @@ function Login() {
 
                   <div className="mt-12 text-sm font-display font-semibold text-gray-700 text-center">
                      Bạn chưa có tài khoản ?{" "}
-                     <NavLink
-                        to="/register"
+                     <span
+                        // to="/register"
+                        onClick={() => navigate("/register")}
                         className="cursor-pointer text-indigo-600 hover:text-indigo-800"
                      >
-                        Đăng ký
-                     </NavLink>
+                        Register
+                     </span>
                   </div>
                </form>
             </div>

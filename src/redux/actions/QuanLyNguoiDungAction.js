@@ -26,6 +26,7 @@ export const dangNhapAction = (thongTinDangNhap, navigate) => {
                type: DANG_NHAP_ACTION,
                thongTinDangNhap: result.data.content,
             });
+
             // navigate(-1); // quay lại trang trước đó
 
             //dispatch hành động đăng nhập rồi
