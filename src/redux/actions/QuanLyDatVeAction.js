@@ -1,6 +1,7 @@
 import axios from "axios";
 import { DOMAIN, TOKEN } from "../../util/setting/config";
 import {
+   CHUYEN_TAB,
    DAT_VE_HOAN_TAT,
    SET_CHI_TIET_PHONG_VE,
 } from "./types/QuanLyDatVeType";
@@ -61,8 +62,11 @@ export const datVeAction = (thongTinDatVe) => {
             await dispatch({
                type: DAT_VE_HOAN_TAT,
             });
-            //rồi mới tắt loading
-            dispatch(hideLoadingAction);
+            //đợi tắt loading
+            await dispatch(hideLoadingAction);
+
+            //rồi chuyển tab
+            dispatch({ type: CHUYEN_TAB });
          }
       } catch (errors) {
          dispatch(hideLoadingAction);

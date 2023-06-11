@@ -1,4 +1,6 @@
 import {
+   CHANGE_TAB_ACTIVE,
+   CHUYEN_TAB,
    DAT_VE,
    DAT_VE_HOAN_TAT,
    SET_CHI_TIET_PHONG_VE,
@@ -40,6 +42,14 @@ export const QuanLyDatVeReducer = (state = stateDefault, action) => {
       }
       case DAT_VE_HOAN_TAT: {
          state.danhSachGheDangDat = [];
+         return { ...state };
+      }
+      case CHUYEN_TAB: {
+         state.tabActive = "2";
+         return { ...state };
+      }
+      case CHANGE_TAB_ACTIVE: {
+         state.tabActive = action.number;
          return { ...state };
       }
       default:

@@ -1,7 +1,10 @@
 import { TOKEN, USER_LOGIN } from "../../util/setting/config";
 import {
    DANG_NHAP_ACTION,
+   SET_AUTHEN,
+   SET_PREVIOU_LOCATION,
    SET_THONG_TIN_NGUOI_DUNG,
+   USER_SIGNUP_SUCCESS,
 } from "../actions/types/QuanLyNguoiDungType";
 
 let user = {};
@@ -10,13 +13,11 @@ if (localStorage.getItem(USER_LOGIN)) {
    user = JSON.parse(localStorage.getItem(USER_LOGIN));
 }
 
-//Nhan ctrl + shilf + p => setting UI or code(json)
-//search format on save => ctrl S => save
-// Search tab => chon editor: tab Size => sua lai nhu y muon
-// DUm e đg viet huong dan
 const stateDefault = {
    userLogin: user,
    thongTinNguoiDung: {},
+   isAuthenticated: false,
+   previousLocation: "/",
 };
 
 export const QuanLyNguoiDungReducer = (state = stateDefault, action) => {
@@ -36,7 +37,20 @@ export const QuanLyNguoiDungReducer = (state = stateDefault, action) => {
          state.thongTinNguoiDung = action.thongTinNguoiDung;
          return { ...state };
       }
+      //set case USER_SIGNUP_SUCCESS
+      case USER_SIGNUP_SUCCESS: {
+         console.log(action.payload);
+         return { ...state };
+         //  return { ...state, dataSignUp: action.payload, errSignUp: null };
+      }
 
+      case SET_AUTHEN: {
+         // set về true chứng tỏ đã đăng nhập
+         return { ...state, isAuthenticated: true, previousLocation: "" };
+      }
+      case SET_PREVIOU_LOCATION: {
+         return { ...state, previousLocation: action.payload };
+      }
       default:
          return { ...state };
    }

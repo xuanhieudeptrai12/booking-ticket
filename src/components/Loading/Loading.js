@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import loadingIcon from "../../assets/image/loadingIcon.gif";
 
 function Loading() {
    const { isLoading } = useSelector((state) => state.LoadingReducer);
@@ -20,7 +21,8 @@ function Loading() {
                   zIndex: 99,
                }}
             >
-               <div className="text-4xl text-white">Loading ...</div>
+               {/* <div className="text-4xl text-white">Loading ...</div> */}
+               <img src={loadingIcon} alt="123" />
             </div>
          ) : (
             ""

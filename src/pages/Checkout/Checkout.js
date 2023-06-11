@@ -8,16 +8,23 @@ import {
    UserOutlined,
    HomeOutlined,
 } from "@ant-design/icons";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useLocation, useParams } from "react-router-dom";
 import {
    datVeAction,
    layChiTietPhongVeAction,
 } from "../../redux/actions/QuanLyDatVeAction";
 import { Fragment } from "react";
-import { DAT_VE } from "../../redux/actions/types/QuanLyDatVeType";
+import {
+   CHANGE_TAB_ACTIVE,
+   DAT_VE,
+} from "../../redux/actions/types/QuanLyDatVeType";
 import { Tabs } from "antd";
 import moment from "moment";
 import { layThongTinNguoiDungAction } from "../../redux/actions/QuanLyNguoiDungAction";
+import {
+   DISPLAY_LOADING,
+   HIDE_LOADING,
+} from "../../redux/actions/types/LoadingType";
 
 function Checkout() {
    const { userLogin } = useSelector((state) => state.QuanLyNguoiDungReducer);
@@ -30,9 +37,25 @@ function Checkout() {
    const dispatch = useDispatch();
 
    const { thongTinPhim, danhSachGhe } = chiTietPhongVe;
+   const location = useLocation();
+   console.log("Location checkout: ", location.state);
 
    useEffect(() => {
-      dispatch(layChiTietPhongVeAction(id));
+      const awaitLoadingData = async () => {
+         try {
+            await dispatch({ type: DISPLAY_LOADING });
+
+            await dispatch(layChiTietPhongVeAction(id));
+
+            await dispatch({ type: HIDE_LOADING });
+         } catch (error) {
+            // Xử lý lỗi nếu có thì cũng tắt loading
+            await dispatch({ type: HIDE_LOADING });
+            console.log(error);
+         }
+      };
+
+      awaitLoadingData();
    }, []);
 
    return (
@@ -280,14 +303,16 @@ export default function CheckoutTab(props) {
    console.log("tabActive", tabActive);
 
    const { userLogin } = useSelector((state) => state.QuanLyNguoiDungReducer);
-   //  useEffect(()=>{
-   //      return ()=> {
-   //          dispatch({
-   //              type:'CHANGE_TAB_ACTIVE',
-   //              number:'1'
-   //          })
-   //      }
-   //  },[])
+
+   useEffect(() => {
+      return () => {
+         dispatch({
+            //khi unmounted thì cho nó quay về tab mặc định là 1, để khi mounted vô lại nó đang ở tab mặc định là 1
+            type: CHANGE_TAB_ACTIVE,
+            number: "1",
+         });
+      };
+   }, []);
 
    const operations = "";
    // const operations = (
@@ -337,12 +362,12 @@ export default function CheckoutTab(props) {
       <div className="p-5">
          <Tabs
             // tabBarExtraContent={operations}
-            // defaultActiveKey="1"
-            // activeKey={tabActive}
+            defaultActiveKey="1"
+            activeKey={tabActive}
             onChange={(key) => {
                console.log("key", key);
                dispatch({
-                  type: "CHANGE_TAB_ACTIVE",
+                  type: CHANGE_TAB_ACTIVE,
                   number: key.toString(),
                });
             }}
