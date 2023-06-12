@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../teamplates/HomeTemplate/Layout/Header/Header";
 import Footer from "../../teamplates/HomeTemplate/Layout/Footer/Footer";
 import { CustomCard } from "@tsamantanis/react-glassmorphism";
@@ -18,9 +18,11 @@ import { SET_AUTHEN, SET_PREVIOU_LOCATION } from "../../redux/actions/types/Quan
 import { USER_LOGIN } from "../../util/setting/config";
 
 function Detail(props) {
+  const [showFullText, setShowFullText] = useState(false)
   const filmDetail = useSelector(
     (state) => state.QuanLyPhimReducer.filmDetail
   );
+
   let { id } = useParams();
   const dispatch = useDispatch();
 
@@ -58,6 +60,8 @@ function Detail(props) {
     awaitLoadingData();
   }, []);
 
+  // console.log(filmDetail.moTa.slice(0, 430));
+  console.log(filmDetail.moTa);
   return (
     <>
       <Header />
@@ -96,8 +100,36 @@ function Detail(props) {
                       "DD.MM.YYYY"
                     )}
                   </p>
-                  <p className="text-4xl">{filmDetail.tenPhim}</p>
-                  <p>{filmDetail.moTa}</p>
+                  <p className="text-4xl">
+                    {filmDetail.tenPhim}
+                  </p>
+                  <p>
+                    {filmDetail.moTa && (
+                      <>
+                        <p>
+                          {showFullText ? filmDetail.moTa : `${filmDetail.moTa.slice(0, 380)}...`}
+                          {filmDetail.moTa.length > 380 && (
+                            <span
+                              className="ml-2 hover:cursor-pointer"
+                              onClick={() => setShowFullText(!showFullText)}
+                              style={{ fontSize: '19px', color: '#9a9aea' }}
+                            >
+                              {showFullText ? 'Ẩn đi' : 'Xem thêm'}
+                            </span>
+                          )}
+                        </p>
+
+                      </>
+                    )}
+                    {!filmDetail.moTa && <div>Loading...</div>}
+                    {/* {filmDetail.moTa && (filmDetail.moTa.slice(0, 430))}
+                    {filmDetail.moTa && filmDetail.moTa.length > maxLength && (
+                      <span className="ml-1" onClick={() => setShowFullText(!showFullText)}>
+                        {showFullText ? 'Ẩn đi' : 'Xem thêm'}
+                      </span>
+                    )} */}
+
+                  </p>
                 </div>
               </div>
             </div>
