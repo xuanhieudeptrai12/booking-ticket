@@ -10,7 +10,7 @@ import {
 } from "./types/QuanLyNguoiDungType";
 import Swal from "sweetalert2";
 
-export const dangNhapAction = (thongTinDangNhap, navigate) => {
+export const dangNhapAction = (thongTinDangNhap) => {
    return async (dispatch) => {
       try {
          const result = await axios({

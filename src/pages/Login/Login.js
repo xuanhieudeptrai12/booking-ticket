@@ -5,6 +5,7 @@ import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { dangNhapAction } from "../../redux/actions/QuanLyNguoiDungAction";
 import logo from "../../assets/image/web-logo.png";
+import Swal from "sweetalert2";
 
 function Login() {
    const dispatch = useDispatch();
@@ -24,11 +25,16 @@ function Login() {
       },
       validationSchema: signUpUserSchema,
       onSubmit: (values) => {
+
          // const action = dangNhapAction(values);
-         dispatch(dangNhapAction(values, navigate, previousLocation));
-         if (previousLocation !== "") {
-            navigate({ pathname: previousLocation });
-         }
+         dispatch(dangNhapAction(values));
+
+         Swal.fire("Thành công", "Bạn đăng nhập thành công", "success").then(
+            () => {
+               if (previousLocation !== "") {
+                  navigate({ pathname: previousLocation });
+               }
+            });
       },
    });
 
@@ -48,6 +54,11 @@ function Login() {
                         autoComplete="off"
                         placeholder="Your Account"
                      />
+                     {formik.errors.taiKhoan && formik.touched.taiKhoan && (
+                        <div className="alert text-danger alert-validation">
+                           {formik.errors.taiKhoan}
+                        </div>
+                     )}
                   </div>
                   <div className="form-group text-left">
                      <input
@@ -59,6 +70,11 @@ function Login() {
                         autoComplete="off"
                         placeholder="Password"
                      />
+                     {formik.errors.matKhau && formik.touched.matKhau && (
+                        <div className="alert text-danger alert-validation">
+                           {formik.errors.matKhau}
+                        </div>
+                     )}
                   </div>
 
                   <div className="mt-10">

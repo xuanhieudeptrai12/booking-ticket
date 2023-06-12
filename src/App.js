@@ -21,7 +21,7 @@ const ProtectedRoute = () => {
    const { isAuthenticated } = useSelector(
       (state) => state.QuanLyNguoiDungReducer
    );
-   //  console.log("ProtectedRoute", isAuthenticated);
+   console.log("ProtectedRoute", isAuthenticated);
    return isAuthenticated ? <Outlet /> : <Navigate to={"/login"} />;
 };
 
@@ -29,7 +29,7 @@ const RejectedRoute = () => {
    const { isAuthenticated } = useSelector(
       (state) => state.QuanLyNguoiDungReducer
    );
-   //  console.log("RejectedRoute", isAuthenticated);
+   console.log("RejectedRoute", isAuthenticated);
    return !isAuthenticated ? <Outlet /> : <Navigate to={"/"} />;
 };
 

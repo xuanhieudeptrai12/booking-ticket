@@ -9,8 +9,7 @@ function Header(props) {
    const handleClick = (type) => {
       navigate(type);
    };
-   const test = localStorage.getItem(USER_LOGIN) === null;
-   console.log(test);
+   const isUserLogin = localStorage.getItem(USER_LOGIN) === null;
    return (
       <div>
          <header className="p-4 dark:bg-gray-800 dark:text-gray-100 bg-opacity-40 bg-black text-white fixed w-full z-10">
@@ -58,7 +57,7 @@ function Header(props) {
                   </li>
                </ul>
 
-               {test ? (
+               {isUserLogin ? (
                   <div className="items-center flex-shrink-0 hidden lg:flex">
                      <button
                         onClick={() => handleClick("/login")}
@@ -74,17 +73,18 @@ function Header(props) {
                      </button>
                   </div>
                ) : (
-                  <div className="flex items-center flex-shrink-0 lg:flex">
+                  <div className="w-52 flex items-center flex-shrink-0 lg:flex justify-between">
                      <img
                         src="https://picsum.photos/50/50"
                         alt="123"
-                        className="mr-4 rounded-full"
+                        className="rounded-full"
                      />
+                     <span>{JSON.parse(localStorage.getItem(USER_LOGIN)).taiKhoan}</span>
                      <div
                         style={{
                            width: "50px",
                            height: "50px",
-                           padding: "6px 0px 0px 7px",
+                           paddingTop: "6px",
                            fontSize: "22px",
                         }}
                         className="hover:cursor-pointer"
