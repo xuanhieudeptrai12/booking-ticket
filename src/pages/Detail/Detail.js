@@ -14,11 +14,7 @@ import {
    DISPLAY_LOADING,
    HIDE_LOADING,
 } from "../../redux/actions/types/LoadingType";
-import {
-   SET_AUTHEN,
-   SET_PREVIOU_LOCATION,
-} from "../../redux/actions/types/QuanLyNguoiDungType";
-import { USER_LOGIN } from "../../util/setting/config";
+import { SET_PREVIOU_LOCATION } from "../../redux/actions/types/QuanLyNguoiDungType";
 
 function Detail(props) {
    const [showFullText, setShowFullText] = useState(false);
@@ -39,9 +35,6 @@ function Detail(props) {
    useEffect(() => {
       !isAuthenticated &&
          dispatch({ type: SET_PREVIOU_LOCATION, payload: previousLocation });
-      // if (localStorage.getItem(USER_LOGIN)) {
-      //   dispatch({ type: SET_AUTHEN })
-      // }
    }, []);
 
    useEffect(() => {

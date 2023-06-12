@@ -1,9 +1,6 @@
 import React, { useEffect } from "react";
 import HomeMenu from "./HomeMenu/HomeMenu";
 import HomeCarousel from "../../teamplates/HomeTemplate/Layout/HomeCarousel/HomeCarousel";
-//kết nối redux
-// import { QuanLyPhimService } from '../../services/QuanLyPhimService'
-// import { QuanLyPhimReducer } from './reducers/QuanLyPhimReducer';
 import { useSelector, useDispatch } from "react-redux";
 import MultipleRowSlick from "../../components/RSlick/MultipleRowSlick";
 import { layDanhSachPhimAction } from "../../redux/actions/QuanLyPhimAction";

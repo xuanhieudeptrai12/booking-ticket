@@ -43,14 +43,12 @@ export const QuanLyNguoiDungReducer = (state = stateDefault, action) => {
          };
       }
       //không phải lỗi
-      //
       case SET_THONG_TIN_NGUOI_DUNG: {
          state.thongTinNguoiDung = action.thongTinNguoiDung;
          return { ...state };
       }
       //set case USER_SIGNUP_SUCCESS
       case USER_SIGNUP_SUCCESS: {
-         console.log(action.payload);
          return { ...state };
          //  return { ...state, dataSignUp: action.payload, errSignUp: null };
       }
