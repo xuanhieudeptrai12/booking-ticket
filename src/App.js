@@ -34,7 +34,11 @@ const RejectedRoute = (props) => {
       (state) => state.QuanLyNguoiDungReducer
    );
    console.log("RejectedRoute", isAuthenticated);
-   return isAuthenticated ? <Outlet /> : <Navigate to={path} />;
+   return localStorage.getItem(USER_LOGIN) ? (
+      <Outlet />
+   ) : (
+      <Navigate to={path} />
+   );
 };
 
 function App() {
@@ -53,15 +57,11 @@ function App() {
             <Route path="/detail/:id" element={<Detail />} />▬
             <Route path="/contact" element={<Contact />} />
             <Route path="/news" element={<News />} />
-            {/* ĐÃ ĐĂNG NHẬP THÀNH CÔNG */}
             <Route path="" element={<RejectedRoute path="/login" />}>
                <Route path="/checkout/:id" element={<Checkout />} />
             </Route>
-            {/* CHƯA ĐĂNG NHẬP THÌ KHÔNG ĐƯỢC VÀO */}
-            {/* <Route path="" element={<RejectedRoute path="/" />}> */}
             <Route path="/login" element={<UserTemplate />} />
             <Route path="/register" element={<Register />} />
-            {/* </Route> */}
          </Routes>
       </>
    );
