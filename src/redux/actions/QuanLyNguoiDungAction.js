@@ -4,6 +4,7 @@ import {
    DANG_NHAP_ACTION,
    SET_AUTHEN,
    SET_THONG_TIN_NGUOI_DUNG,
+   USER_LOGOUT,
    USER_SIGNUP_FAILED,
    USER_SIGNUP_REQUEST,
    USER_SIGNUP_SUCCESS,
@@ -80,6 +81,20 @@ export const DangKyAction = (userRegister, navigate) => {
          });
          console.log("that bai", err);
       }
+   };
+};
+
+export const dangXuatTaiKhoanAction = (navigate) => {
+   return (dispatch) => {
+      dispatch({
+         type: USER_LOGOUT,
+      });
+      Swal.fire("Thành công", "bạn đăng xuất thành công", "success").then(
+         () => {
+            // Chuyển trang tại đây
+            navigate("/");
+         }
+      );
    };
 };
 

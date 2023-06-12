@@ -4,6 +4,8 @@ import {
    SET_AUTHEN,
    SET_PREVIOU_LOCATION,
    SET_THONG_TIN_NGUOI_DUNG,
+   UP_DATE_NGUOI_DUNG,
+   USER_LOGOUT,
    USER_SIGNUP_SUCCESS,
 } from "../actions/types/QuanLyNguoiDungType";
 
@@ -18,6 +20,7 @@ const stateDefault = {
    thongTinNguoiDung: {},
    isAuthenticated: false,
    previousLocation: "/",
+   currentUser: user,
 };
 
 export const QuanLyNguoiDungReducer = (state = stateDefault, action) => {
@@ -30,6 +33,14 @@ export const QuanLyNguoiDungReducer = (state = stateDefault, action) => {
             JSON.stringify(thongTinDangNhap.accessToken)
          );
          return { ...state };
+      }
+      case UP_DATE_NGUOI_DUNG: {
+         const isAuthenticated = action.payload?.taiKhoan ? true : false;
+         return {
+            ...state,
+            currentUser: action.payload,
+            isAuthenticated: isAuthenticated,
+         };
       }
       //không phải lỗi
       //
@@ -50,6 +61,16 @@ export const QuanLyNguoiDungReducer = (state = stateDefault, action) => {
       }
       case SET_PREVIOU_LOCATION: {
          return { ...state, previousLocation: action.payload };
+      }
+
+      case USER_LOGOUT: {
+         localStorage.removeItem(USER_LOGIN);
+         localStorage.removeItem(TOKEN);
+         return {
+            ...state,
+            currentUser: {},
+            isAuthenticated: false,
+         };
       }
       default:
          return { ...state };

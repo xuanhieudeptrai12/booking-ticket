@@ -1,28 +1,21 @@
 import { useFormik } from "formik";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { dangNhapAction } from "../../redux/actions/QuanLyNguoiDungAction";
 import logo from "../../assets/image/web-logo.png";
 import Swal from "sweetalert2";
 import { useEffect } from "react";
-import { USER_LOGIN } from "../../util/setting/config";
+import { TOKEN, USER_LOGIN } from "../../util/setting/config";
 import { SET_AUTHEN } from "../../redux/actions/types/QuanLyNguoiDungType";
 
 function Login() {
    const dispatch = useDispatch();
    // const { userLogin } = useSelector((state) => state.QuanLyNguoiDungReducer);
-   const { previousLocation } = useSelector(
+   const { previousLocation, isAuthenticated } = useSelector(
       (state) => state.QuanLyNguoiDungReducer
    );
    const navigate = useNavigate();
-
-   //ádasdasdasdasasasasasasasasasasasasasas
-   useEffect(() => {
-      if (localStorage.getItem(USER_LOGIN)) {
-         dispatch({ type: SET_AUTHEN })
-      }
-   }, [])
 
    const signUpUserSchema = yup.object().shape({
       taiKhoan: yup.string().required("*Require Field!"),
@@ -35,7 +28,6 @@ function Login() {
       },
       validationSchema: signUpUserSchema,
       onSubmit: (values) => {
-
          // const action = dangNhapAction(values);
          dispatch(dangNhapAction(values));
 
@@ -44,72 +36,78 @@ function Login() {
                if (previousLocation !== "") {
                   navigate({ pathname: previousLocation });
                }
-            });
+            }
+         );
       },
    });
-
+   if (localStorage.getItem(TOKEN)) {
+      return <Navigate to="/" />;
+   }
+   console.log(isAuthenticated);
    return (
       <>
-         <div id="signup">
-            <div className="signup__wrapper">
-               <img className="signup__logo" src={logo} alt="dang-ky" />
-               <form onSubmit={formik.handleSubmit}>
-                  <div className="form-group text-left">
-                     <input
-                        type="text"
-                        name="taiKhoan"
-                        className="form-control"
-                        value={formik.values.taiKhoan}
-                        onChange={formik.handleChange}
-                        autoComplete="off"
-                        placeholder="Your Account"
-                     />
-                     {formik.errors.taiKhoan && formik.touched.taiKhoan && (
-                        <div className="alert text-danger alert-validation">
-                           {formik.errors.taiKhoan}
-                        </div>
-                     )}
-                  </div>
-                  <div className="form-group text-left">
-                     <input
-                        type="password"
-                        name="matKhau"
-                        className="form-control"
-                        value={formik.values.matKhau}
-                        onChange={formik.handleChange}
-                        autoComplete="off"
-                        placeholder="Password"
-                     />
-                     {formik.errors.matKhau && formik.touched.matKhau && (
-                        <div className="alert text-danger alert-validation">
-                           {formik.errors.matKhau}
-                        </div>
-                     )}
-                  </div>
+         {!isAuthenticated && (
+            <div id="signup">
+               <div className="signup__wrapper">
+                  <img className="signup__logo" src={logo} alt="dang-ky" />
+                  <form onSubmit={formik.handleSubmit}>
+                     <div className="form-group text-left">
+                        <input
+                           type="text"
+                           name="taiKhoan"
+                           className="form-control"
+                           value={formik.values.taiKhoan}
+                           onChange={formik.handleChange}
+                           autoComplete="off"
+                           placeholder="Your Account"
+                        />
+                        {formik.errors.taiKhoan && formik.touched.taiKhoan && (
+                           <div className="alert text-danger alert-validation">
+                              {formik.errors.taiKhoan}
+                           </div>
+                        )}
+                     </div>
+                     <div className="form-group text-left">
+                        <input
+                           type="password"
+                           name="matKhau"
+                           className="form-control"
+                           value={formik.values.matKhau}
+                           onChange={formik.handleChange}
+                           autoComplete="off"
+                           placeholder="Password"
+                        />
+                        {formik.errors.matKhau && formik.touched.matKhau && (
+                           <div className="alert text-danger alert-validation">
+                              {formik.errors.matKhau}
+                           </div>
+                        )}
+                     </div>
 
-                  <div className="mt-10">
-                     <button
-                        className="bg-indigo-500 text-gray-100 p-4 w-full rounded-full tracking-wide
+                     <div className="mt-10">
+                        <button
+                           className="bg-indigo-500 text-gray-100 p-4 w-full rounded-full tracking-wide
                             font-semibold font-display focus:outline-none focus:shadow-outline hover:bg-indigo-600
                             shadow-lg"
-                     >
-                        Đăng nhập
-                     </button>
-                  </div>
+                        >
+                           Đăng nhập
+                        </button>
+                     </div>
 
-                  <div className="mt-12 text-sm font-display font-semibold text-gray-700 text-center">
-                     Bạn chưa có tài khoản ?{" "}
-                     <span
-                        // to="/register"
-                        onClick={() => navigate("/register")}
-                        className="cursor-pointer text-indigo-600 hover:text-indigo-800"
-                     >
-                        Register
-                     </span>
-                  </div>
-               </form>
+                     <div className="mt-12 text-sm font-display font-semibold text-gray-700 text-center">
+                        Bạn chưa có tài khoản ?{" "}
+                        <span
+                           // to="/register"
+                           onClick={() => navigate("/register")}
+                           className="cursor-pointer text-indigo-600 hover:text-indigo-800"
+                        >
+                           Register
+                        </span>
+                     </div>
+                  </form>
+               </div>
             </div>
-         </div>
+         )}
       </>
    );
 }

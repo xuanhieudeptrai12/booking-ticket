@@ -3,9 +3,12 @@ import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { LogoutOutlined } from "@ant-design/icons";
 import { USER_LOGIN } from "../../../../util/setting/config";
+import { useDispatch } from "react-redux";
+import { dangXuatTaiKhoanAction } from "../../../../redux/actions/QuanLyNguoiDungAction";
 
 function Header(props) {
    const navigate = useNavigate();
+   const dispatch = useDispatch();
    const handleClick = (type) => {
       navigate(type);
    };
@@ -79,7 +82,9 @@ function Header(props) {
                         alt="123"
                         className="rounded-full"
                      />
-                     <span>{JSON.parse(localStorage.getItem(USER_LOGIN)).taiKhoan}</span>
+                     <span>
+                        {JSON.parse(localStorage.getItem(USER_LOGIN)).taiKhoan}
+                     </span>
                      <div
                         style={{
                            width: "50px",
@@ -88,6 +93,9 @@ function Header(props) {
                            fontSize: "22px",
                         }}
                         className="hover:cursor-pointer"
+                        onClick={() => {
+                           dispatch(dangXuatTaiKhoanAction(navigate));
+                        }}
                      >
                         <LogoutOutlined size={400} />
                      </div>

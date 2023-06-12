@@ -10,7 +10,10 @@ import CheckoutTemplate from "./teamplates/CheckoutTemplate/CheckoutTemplate";
 import Checkout from "./pages/Checkout/Checkout";
 import UserTemplate from "./teamplates/UserTemplate/UserTemplate";
 import Loading from "./components/Loading/Loading";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { USER_LOGIN } from "./util/setting/config";
+import { UP_DATE_NGUOI_DUNG } from "./redux/actions/types/QuanLyNguoiDungType";
 
 export const history = createBrowserHistory();
 
@@ -25,17 +28,23 @@ const ProtectedRoute = () => {
    return isAuthenticated ? <Outlet /> : <Navigate to={"/login"} />;
 };
 
-const RejectedRoute = () => {
+const RejectedRoute = (props) => {
+   const { path } = props;
    const { isAuthenticated } = useSelector(
       (state) => state.QuanLyNguoiDungReducer
    );
    console.log("RejectedRoute", isAuthenticated);
-   return !isAuthenticated ? <Outlet /> : <Navigate to={"/"} />;
+   return isAuthenticated ? <Outlet /> : <Navigate to={path} />;
 };
 
 function App() {
    const location = useLocation();
-   //  console.log(location);
+   const dispatch = useDispatch();
+   useEffect(() => {
+      const userCur = JSON.parse(localStorage.getItem(USER_LOGIN)) ?? {};
+      console.log(userCur);
+      dispatch({ type: UP_DATE_NGUOI_DUNG, payload: userCur });
+   }, [dispatch]);
    return (
       <>
          <Loading />
@@ -45,14 +54,14 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/news" element={<News />} />
             {/* ĐÃ ĐĂNG NHẬP THÀNH CÔNG */}
-            <Route path="" element={<ProtectedRoute />}>
+            <Route path="" element={<RejectedRoute path="/login" />}>
                <Route path="/checkout/:id" element={<Checkout />} />
             </Route>
             {/* CHƯA ĐĂNG NHẬP THÌ KHÔNG ĐƯỢC VÀO */}
-            <Route path="" element={<RejectedRoute />}>
-               <Route path="/login" element={<UserTemplate />} />
-               <Route path="/register" element={<Register />} />
-            </Route>
+            {/* <Route path="" element={<RejectedRoute path="/" />}> */}
+            <Route path="/login" element={<UserTemplate />} />
+            <Route path="/register" element={<Register />} />
+            {/* </Route> */}
          </Routes>
       </>
    );
