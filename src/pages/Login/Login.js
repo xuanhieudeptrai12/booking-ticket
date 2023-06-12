@@ -5,14 +5,24 @@ import { useDispatch, useSelector } from "react-redux";
 import { dangNhapAction } from "../../redux/actions/QuanLyNguoiDungAction";
 import logo from "../../assets/image/web-logo.png";
 import Swal from "sweetalert2";
+import { useEffect } from "react";
+import { USER_LOGIN } from "../../util/setting/config";
+import { SET_AUTHEN } from "../../redux/actions/types/QuanLyNguoiDungType";
 
 function Login() {
    const dispatch = useDispatch();
    // const { userLogin } = useSelector((state) => state.QuanLyNguoiDungReducer);
-   const { previousLocation, } = useSelector(
+   const { previousLocation } = useSelector(
       (state) => state.QuanLyNguoiDungReducer
    );
    const navigate = useNavigate();
+
+   //ádasdasdasdasasasasasasasasasasasasasas
+   useEffect(() => {
+      if (localStorage.getItem(USER_LOGIN)) {
+         dispatch({ type: SET_AUTHEN })
+      }
+   }, [])
 
    const signUpUserSchema = yup.object().shape({
       taiKhoan: yup.string().required("*Require Field!"),

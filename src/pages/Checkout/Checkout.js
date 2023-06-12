@@ -9,7 +9,7 @@ import {
   HomeOutlined,
   SmileOutlined,
 } from "@ant-design/icons";
-import { NavLink, useLocation, useParams } from "react-router-dom";
+import { NavLink, useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   datVeAction,
   layChiTietPhongVeAction,
@@ -26,6 +26,8 @@ import {
   DISPLAY_LOADING,
   HIDE_LOADING,
 } from "../../redux/actions/types/LoadingType";
+import { USER_LOGIN } from "../../util/setting/config";
+import { SET_AUTHEN } from "../../redux/actions/types/QuanLyNguoiDungType";
 
 function Checkout() {
   const { userLogin } = useSelector((state) => state.QuanLyNguoiDungReducer);
@@ -36,10 +38,18 @@ function Checkout() {
   const { id } = useParams();
 
   const dispatch = useDispatch();
+  const navigate = useNavigate()
 
   const { thongTinPhim, danhSachGhe } = chiTietPhongVe;
   const location = useLocation();
-  console.log("Location checkout: ", location.state?.isAuthenticated);
+  console.log("Location checkout: ", location.state);
+
+  useEffect(() => {
+    if (localStorage.getItem(USER_LOGIN)) {
+      navigate(location.state)
+      dispatch({ type: SET_AUTHEN })
+    }
+  }, [])
 
   useEffect(() => {
     const awaitLoadingData = async () => {

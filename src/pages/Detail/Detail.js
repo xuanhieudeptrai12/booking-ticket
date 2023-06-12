@@ -239,7 +239,7 @@ function Detail(props) {
                                         ) => {
                                           return (
                                             <Link
-                                              to={`/checkout/${lichChieu.maLichChieu}`} state={{ isAuthenticated }}
+                                              to={`/checkout/${lichChieu.maLichChieu}`} state={`/checkout/${lichChieu.maLichChieu}`}
                                               // onClick={() => navigate(`/checkout/${lichChieu.maLichChieu}`, { isAuthenticated })}
                                               // to={`/checkout/${lichChieu.maLichChieu}`}
                                               key={index}
