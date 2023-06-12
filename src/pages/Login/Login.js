@@ -5,9 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { dangNhapAction } from "../../redux/actions/QuanLyNguoiDungAction";
 import logo from "../../assets/image/web-logo.png";
 import Swal from "sweetalert2";
-import { useEffect } from "react";
-import { TOKEN, USER_LOGIN } from "../../util/setting/config";
-import { SET_AUTHEN } from "../../redux/actions/types/QuanLyNguoiDungType";
+import { TOKEN } from "../../util/setting/config";
 
 function Login() {
    const dispatch = useDispatch();
@@ -28,7 +26,6 @@ function Login() {
       },
       validationSchema: signUpUserSchema,
       onSubmit: (values) => {
-         // const action = dangNhapAction(values);
          dispatch(dangNhapAction(values));
 
          Swal.fire("Thành công", "Bạn đăng nhập thành công", "success").then(
@@ -43,7 +40,7 @@ function Login() {
    if (localStorage.getItem(TOKEN)) {
       return <Navigate to="/" />;
    }
-   console.log(isAuthenticated);
+
    return (
       <>
          {!isAuthenticated && (

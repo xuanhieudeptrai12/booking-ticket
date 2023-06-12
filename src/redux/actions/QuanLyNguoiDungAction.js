@@ -28,8 +28,6 @@ export const dangNhapAction = (thongTinDangNhap) => {
                thongTinDangNhap: result.data.content,
             });
 
-            // navigate(-1); // quay lại trang trước đó
-
             //dispatch hành động đăng nhập rồi
             //sau khi đăng nhập rồi thì set biến authen bằng true
             dispatch({ type: SET_AUTHEN });

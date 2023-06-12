@@ -33,7 +33,7 @@ function Checkout() {
    const { userLogin } = useSelector((state) => state.QuanLyNguoiDungReducer);
    const { chiTietPhongVe, danhSachGheDangDat, danhSachGheKhachDat } =
       useSelector((state) => state.QuanLyDatVeReducer);
-   // const { isAuthenticated } = useSelector(state => state.QuanLyNguoiDungReducer)
+
    const { id } = useParams();
 
    const dispatch = useDispatch();
@@ -71,7 +71,6 @@ function Checkout() {
       awaitLoadingData();
    }, []);
 
-   // console.log(isAuthenticated);
    return (
       <div className=" min-h-screen mt-5">
          <div className="grid grid-cols-12">

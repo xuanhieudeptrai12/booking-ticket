@@ -8,11 +8,6 @@ const { TabPane } = Tabs;
 function HomeMenu(props) {
    //thấy thông tin tên rạp từ props
    const { heThongRapChieu } = props;
-   // const { isAuthenticated } = useSelector(
-   //    (state) => state.QuanLyNguoiDungReducer
-   // );
-
-   // console.log(isAuthenticated);
 
    return (
       <>
