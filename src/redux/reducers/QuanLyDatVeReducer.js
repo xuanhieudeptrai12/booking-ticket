@@ -9,6 +9,8 @@ import {
 const stateDefault = {
    chiTietPhongVe: {},
    danhSachGheDangDat: [],
+   danhSachGheKhachDat: [{ maGhe: 48041 }, { maGhe: 48042 }],
+   // [{maGhe:48041},{maGhe:48042}],
    tabActive: "1",
 };
 

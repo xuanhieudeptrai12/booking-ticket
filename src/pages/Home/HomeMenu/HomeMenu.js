@@ -1,4 +1,4 @@
-import React, { useState, memo, Fragment } from "react";
+import React, { memo, Fragment } from "react";
 import { NavLink } from "react-router-dom";
 import { Tabs } from "antd";
 import moment from "moment";
@@ -8,6 +8,11 @@ const { TabPane } = Tabs;
 function HomeMenu(props) {
    //thấy thông tin tên rạp từ props
    const { heThongRapChieu } = props;
+   // const { isAuthenticated } = useSelector(
+   //    (state) => state.QuanLyNguoiDungReducer
+   // );
+
+   // console.log(isAuthenticated);
 
    return (
       <>

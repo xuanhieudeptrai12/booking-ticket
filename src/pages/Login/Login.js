@@ -1,6 +1,5 @@
 import { useFormik } from "formik";
-import React, { useEffect } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { dangNhapAction } from "../../redux/actions/QuanLyNguoiDungAction";
@@ -9,12 +8,12 @@ import Swal from "sweetalert2";
 
 function Login() {
    const dispatch = useDispatch();
-   const { userLogin } = useSelector((state) => state.QuanLyNguoiDungReducer);
+   // const { userLogin } = useSelector((state) => state.QuanLyNguoiDungReducer);
    const { previousLocation, } = useSelector(
       (state) => state.QuanLyNguoiDungReducer
    );
-
    const navigate = useNavigate();
+
    const signUpUserSchema = yup.object().shape({
       taiKhoan: yup.string().required("*Require Field!"),
       matKhau: yup.string().required("*Require Field!"),

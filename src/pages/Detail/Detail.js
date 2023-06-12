@@ -6,7 +6,7 @@ import "@tsamantanis/react-glassmorphism/dist/index.css";
 import "../../assets/styles/circle.css";
 import { Rate, Tabs } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { layThongTinChiTietPhim } from "../../redux/actions/QuanLyRapAction";
 import moment from "moment";
 import TabPane from "antd/es/tabs/TabPane";
@@ -60,8 +60,6 @@ function Detail(props) {
     awaitLoadingData();
   }, []);
 
-  // console.log(filmDetail.moTa.slice(0, 430));
-  console.log(filmDetail.moTa);
   return (
     <>
       <Header />
@@ -240,8 +238,10 @@ function Detail(props) {
                                           index
                                         ) => {
                                           return (
-                                            <NavLink
-                                              to={`/checkout/${lichChieu.maLichChieu}`}
+                                            <Link
+                                              to={`/checkout/${lichChieu.maLichChieu}`} state={{ isAuthenticated }}
+                                              // onClick={() => navigate(`/checkout/${lichChieu.maLichChieu}`, { isAuthenticated })}
+                                              // to={`/checkout/${lichChieu.maLichChieu}`}
                                               key={index}
                                               className="w-24 text-base text-green-400  border px-3 py-1 rounded-lg h-9 transition duration-300 ease-in-out hover:bg-green-400 hover:text-white hover:shadow-md"
                                             ><span>
@@ -251,7 +251,7 @@ function Detail(props) {
                                                   "hh:mm A"
                                                 )}
                                               </span>
-                                            </NavLink>
+                                            </Link>
                                           );
                                         }
                                       )}
